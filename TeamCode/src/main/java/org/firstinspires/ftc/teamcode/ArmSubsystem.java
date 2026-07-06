@@ -9,7 +9,7 @@ public class ArmSubsystem {
 
     // PID Variables
     private double target = 0;
-    private final double kP = 0.005;
+    private final double kP = 0.05;
 
     public ArmSubsystem(HardwareMap hardwareMap) {
 

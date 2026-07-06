@@ -11,6 +11,7 @@ public class Teleop extends LinearOpMode {
 
         ArmSubsystem arm = new ArmSubsystem(hardwareMap);
         DriveSubsystem chassis = new DriveSubsystem(hardwareMap);
+        ClawSubsystem claw = new ClawSubsystem(hardwareMap);
 
         telemetry.addLine("Ready!");
         telemetry.update();
@@ -20,14 +21,23 @@ public class Teleop extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Preset Positions
-            if (gamepad2.a)
+
+            if (gamepad1.a)
                 arm.setTarget(0);
 
-            if (gamepad2.b)
-                arm.setTarget(500);
+            if (gamepad1.b)
+                arm.setTarget(170);
 
-            if (gamepad2.y)
-                arm.setTarget(1000);
+            if (gamepad1.y)
+                arm.setTarget(90);
+
+
+            if (gamepad1.x) {
+                claw.CloseClaw();
+            } else {
+                claw.OpenClaw();
+            }
+
 
             chassis.updateInputs(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 

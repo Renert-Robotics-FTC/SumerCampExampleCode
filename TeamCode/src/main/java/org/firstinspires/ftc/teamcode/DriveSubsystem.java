@@ -38,10 +38,10 @@ public class DriveSubsystem {
     public void update(){
         double speedCapFactor;
         speedCapFactor = 1 / (Math.abs(forward) + Math.abs(strafe) + Math.abs(turn));
-        BL.setPower((forward - strafe + turn) * speedCapFactor);
-        FL.setPower((forward + strafe + turn) * speedCapFactor);
-        BR.setPower((forward + strafe - turn) * speedCapFactor);
-        FR.setPower((forward - strafe - turn) * speedCapFactor);
+        BL.setPower((forward + strafe + turn) * speedCapFactor);
+        FL.setPower((forward - strafe + turn) * speedCapFactor);
+        BR.setPower((forward - strafe - turn) * speedCapFactor);
+        FR.setPower((forward + strafe - turn) * speedCapFactor);
 
     }
 
