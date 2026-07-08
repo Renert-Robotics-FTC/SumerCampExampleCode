@@ -21,14 +21,7 @@ public class Teleop extends LinearOpMode {
 
             // Preset Positions
 
-            if (gamepad1.a)
-                arm.setTarget(0);
 
-            if (gamepad1.b)
-                arm.setTarget(170);
-
-            if (gamepad1.y)
-                arm.setTarget(90);
 
 
 
@@ -36,12 +29,11 @@ public class Teleop extends LinearOpMode {
 
 
             // Run the PID every loop
-            arm.update();
+            arm.RunMotor();
 
 
             // Telemetry
-            telemetry.addData("Target", arm.getTarget());
-            telemetry.addData("Position", arm.getPosition());
+
 
             telemetry.update();
         }
