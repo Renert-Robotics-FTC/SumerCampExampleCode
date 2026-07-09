@@ -5,20 +5,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ExampleSubsystem {
 
-    private DcMotor Motor;
+    private DcMotor motor;
 
     // PID Variables
 
 
     public ExampleSubsystem(HardwareMap hardwareMap) {
 
-        Motor = hardwareMap.get(DcMotor.class, "motor");
+        motor = hardwareMap.get(DcMotor.class, "motor");
 
 
     }
 
     public void RunMotor() {
-        Motor.setPower(1);
+        motor.setPower(1);
     }
 
 }
