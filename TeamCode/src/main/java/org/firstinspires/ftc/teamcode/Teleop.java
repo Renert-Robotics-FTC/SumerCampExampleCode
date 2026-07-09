@@ -11,6 +11,8 @@ public class Teleop extends LinearOpMode {
 
         ExampleSubsystem Subsystem = new ExampleSubsystem(hardwareMap);
         ArmSubsystem Armsubsystem = new ArmSubsystem(hardwareMap);
+        ClawSubsystem clawSubsystem = new ClawSubsystem(hardwareMap);
+        DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap);
 
 
         telemetry.addLine("Ready!");
@@ -18,7 +20,22 @@ public class Teleop extends LinearOpMode {
 
         waitForStart();
 
+        boolean clawOpen = false;
+        boolean lastLB = false;
+
         while (opModeIsActive()) {
+
+            double forward = -gamepad1.left_stick_y;
+            double strafe = gamepad1.left_stick_x;
+            double turn = gamepad1.right_stick_x;
+
+            driveSubsystem.drive(
+                    forward,
+                    strafe,
+                    turn,
+                    gamepad1.x
+            );
+
 
             // Preset Positions
             if (gamepad1.a) {
@@ -33,6 +50,19 @@ public class Teleop extends LinearOpMode {
                 Armsubsystem.setTargetPosition(1000);
             }
 
+            if (gamepad1.left_bumper && !lastLB) {
+
+                clawOpen = !clawOpen;
+
+                if (clawOpen) {
+                    clawSubsystem.open();
+                } else {
+                    clawSubsystem.close();
+                }
+            }
+
+            lastLB = gamepad1.left_bumper;
+
             // Run the PID every loop
 
             // Telemetry
@@ -42,10 +72,9 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Target", Armsubsystem.getTargetPosition());
             telemetry.addData("Current", Armsubsystem.getCurrentPosition());
             telemetry.addData("Power", Armsubsystem.getPower());
-            telemetry.update();
-
 
             telemetry.update();
+
         }
     }
 }
