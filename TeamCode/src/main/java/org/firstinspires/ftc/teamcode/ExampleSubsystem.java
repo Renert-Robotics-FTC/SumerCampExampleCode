@@ -3,22 +3,22 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class ArmSubsystem {
+public class ExampleSubsystem {
 
-    private DcMotor armMotor;
+    private DcMotor Motor;
 
     // PID Variables
 
 
-    public ArmSubsystem(HardwareMap hardwareMap) {
+    public ExampleSubsystem(HardwareMap hardwareMap) {
 
-        armMotor = hardwareMap.get(DcMotor.class, "arm");
+        Motor = hardwareMap.get(DcMotor.class, "motor");
 
 
     }
 
     public void RunMotor() {
-        armMotor.setPower(1);
+        Motor.setPower(1);
     }
 
 }

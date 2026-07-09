@@ -9,7 +9,7 @@ public class Teleop extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        ArmSubsystem arm = new ArmSubsystem(hardwareMap);
+        ExampleSubsystem Subsystem = new ExampleSubsystem(hardwareMap);
 
 
         telemetry.addLine("Ready!");
@@ -29,7 +29,7 @@ public class Teleop extends LinearOpMode {
 
 
             // Run the PID every loop
-            arm.RunMotor();
+            Subsystem.RunMotor();
 
 
             // Telemetry
