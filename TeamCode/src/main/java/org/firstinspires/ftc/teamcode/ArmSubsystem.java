@@ -1,49 +1,108 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ArmSubsystem {
 
-    private DcMotor armMotor;
-
-    // PID Variables
-    private double target = 0;
-    private final double kP = 0.05;
-
     public ArmSubsystem(HardwareMap hardwareMap) {
 
-        armMotor = hardwareMap.get(DcMotor.class, "arm");
+        arm = hardwareMap.get(DcMotor.class, "arm");
 
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armPID = new PIDController(
+                0.01,
+                0,
+                0.0005
+        );
     }
 
-    public void setTarget(double newTarget) {
-        target = newTarget;
+    public void RunMotor() {
+        arm.setPower(1);
     }
+
+    public void StopMotor() {
+        arm.setPower(0);
+    }
+
+    public class PIDController {
+
+        private double kP;
+        private double kI;
+        private double kD;
+
+        private double integral = 0;
+        private double lastError = 0;
+        private long lastTime = System.nanoTime();
+
+        public PIDController(double p, double i, double d) {
+            kP = p;
+            kI = i;
+            kD = d;
+        }
+
+        public double calculate(double target, double current) {
+
+            double error = target - current;
+
+            long currentTime = System.nanoTime();
+            double dt = (currentTime - lastTime) / 1e9;
+            lastTime = currentTime;
+
+            integral += error * dt;
+
+            double derivative = 0;
+            if (dt > 0) {
+                derivative = (error - lastError) / dt;
+            }
+
+            lastError = error;
+
+            return (kP * error)
+                    + (kI * integral)
+                    + (kD * derivative);
+        }
+
+        public void reset() {
+            integral = 0;
+            lastError = 0;
+            lastTime = System.nanoTime();
+        }
+    }
+
+    private DcMotor arm;
+
+    PIDController armPID;
+
+    int targetPosition = 500;
 
     public void update() {
+        int current = arm.getCurrentPosition();
 
-        double position = armMotor.getCurrentPosition();
+        double power = armPID.calculate(targetPosition, current);
 
-        double error = target - position;
+        power = Math.max(-1, Math.min(1, power));
 
-        double power = error * kP;
-
-        // Prevent excessive power
-        power = Math.max(-1.0, Math.min(power, 1.0));
-
-        armMotor.setPower(power);
+        arm.setPower(power);
     }
 
-    public double getTarget() {
-        return target;
+    public int getCurrentPosition() {
+        return arm.getCurrentPosition();
     }
 
-    public int getPosition() {
-        return armMotor.getCurrentPosition();
+    public double getPower() {
+        return arm.getPower();
+    }
+
+    public int getTargetPosition() {
+        return targetPosition;
+    }
+
+    public void setTargetPosition(int target) {
+        targetPosition = target;
     }
 }
