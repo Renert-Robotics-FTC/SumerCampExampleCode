@@ -10,6 +10,12 @@ public class Teleop extends LinearOpMode {
     public void runOpMode() {
 
         ExampleSubsystem Subsystem = new ExampleSubsystem(hardwareMap);
+        ArmSubsystem Armsubsystem = new ArmSubsystem(hardwareMap);
+        if (gamepad1.a) {
+            Armsubsystem.RunMotor();
+        } else {
+            Armsubsystem.StopMotor();
+        }
 
 
         telemetry.addLine("Ready!");
